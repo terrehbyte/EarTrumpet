@@ -372,6 +372,17 @@
                 </Grid>
             </Grid>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:FilterDevicesViewModel}">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Style="{StaticResource BodyText}" Text="{x:Static resx:Resources.FilterDevicesText}" ></TextBlock>
+                <TextBox
+                    Text="{Binding FilterDevicesList}"
+                    TextWrapping="NoWrap"
+                    AcceptsReturn="True"
+                    VerticalScrollBarVisibility="Auto"
+                    LostFocus="{Event:Binding OnLostFocus}"></TextBox>
+            </StackPanel>
+        </DataTemplate>
         <Style x:Key="SettingsListViewItem" TargetType="{x:Type ListViewItem}">
             <Setter Property="OverridesDefaultStyle" Value="True" />
             <Setter Property="SnapsToDevicePixels" Value="True" />

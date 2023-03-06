@@ -21,6 +21,7 @@ namespace EarTrumpet.UI.ViewModels
         public event Action TrayPropertyChanged;
 
         public ObservableCollection<DeviceViewModel> AllDevices { get; private set; } = new ObservableCollection<DeviceViewModel>();
+        public ObservableCollection<DeviceViewModel> PreferredDevices { get; private set; } = new ObservableCollection<DeviceViewModel>();
         public DeviceViewModel Default { get; private set; }
 
         private readonly IAudioDeviceManager _deviceManager;
@@ -94,7 +95,15 @@ namespace EarTrumpet.UI.ViewModels
         protected virtual void AddDevice(IAudioDevice device)
         {
             var newDevice = new DeviceViewModel(this, _deviceManager, device);
+            
             AllDevices.AddSorted(newDevice, DeviceViewModel.CompareByDisplayName);
+
+            string[] separators = new string[] { "\r\n" };
+            var filteredDevices = _settings.FilterDevicesList.Split(separators, StringSplitOptions.None);
+            if (!filteredDevices.Contains(device.DisplayName))
+            {
+                PreferredDevices.Add(newDevice);
+            }
         }
 
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -121,6 +130,7 @@ namespace EarTrumpet.UI.ViewModels
 
                 case NotifyCollectionChangedAction.Reset:
                     AllDevices.Clear();
+                    PreferredDevices.Clear();
                     foreach (var device in _deviceManager.Devices)
                     {
                         AddDevice(device);

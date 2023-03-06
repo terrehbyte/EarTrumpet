@@ -693,6 +693,51 @@ namespace EarTrumpet.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mouse settings.
+        /// </summary>
+        public static string MouseSettingsPageText {
+            get {
+                return ResourceManager.GetString("MouseSettingsPageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter.
+        /// </summary>
+        public static string FilterCategoryTitle {
+            get {
+                return ResourceManager.GetString("FilterCategoryTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide devices from expanded view.
+        /// </summary>
+        public static string FilterDescriptionText {
+            get {
+                return ResourceManager.GetString("FilterDescriptionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specify the name of each device to hide separated by newlines.
+        /// </summary>
+        public static string FilterDevicesText {
+            get {
+                return ResourceManager.GetString("FilterDevicesText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Devices.
+        /// </summary>
+        public static string FilterDevicesTitle {
+            get {
+                return ResourceManager.GetString("FilterDevicesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Find a setting.
         /// </summary>
         public static string FindASettingText {
@@ -851,15 +896,6 @@ namespace EarTrumpet.Properties {
         public static string MoreCommandsAccessibleText {
             get {
                 return ResourceManager.GetString("MoreCommandsAccessibleText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Mouse settings.
-        /// </summary>
-        public static string MouseSettingsPageText {
-            get {
-                return ResourceManager.GetString("MouseSettingsPageText", resourceCulture);
             }
         }
         

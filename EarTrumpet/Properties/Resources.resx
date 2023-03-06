@@ -665,4 +665,16 @@ Open [https://eartrumpet.app/jmp/fixfonts] now?</value>
   <data name="SettingsUseLogarithmicVolume" xml:space="preserve">
     <value>Use logarithmic volume scale</value>
   </data>
+  <data name="FilterCategoryTitle" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="FilterDescriptionText" xml:space="preserve">
+    <value>Hide devices from expanded view</value>
+  </data>
+  <data name="FilterDevicesText" xml:space="preserve">
+    <value>Specify the name of each device to hide separated by newlines</value>
+  </data>
+  <data name="FilterDevicesTitle" xml:space="preserve">
+    <value>Devices</value>
+  </data>
 </root>

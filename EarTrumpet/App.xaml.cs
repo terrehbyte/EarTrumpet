@@ -253,6 +253,17 @@ namespace EarTrumpet
             var allCategories = new List<SettingsCategoryViewModel>();
             allCategories.Add(defaultCategory);
 
+            var filterCategory = new SettingsCategoryViewModel(
+                EarTrumpet.Properties.Resources.FilterCategoryTitle,
+                "\xE71D",
+                EarTrumpet.Properties.Resources.FilterDescriptionText,
+                null,
+                new SettingsPageViewModel[]
+                    {
+                        new FilterDevicesViewModel(Settings),
+                    });
+            allCategories.Add(filterCategory);
+
             if (AddonManager.Host.SettingsItems != null)
             {
                 allCategories.AddRange(AddonManager.Host.SettingsItems.Select(a => CreateAddonSettingsPage(a)));

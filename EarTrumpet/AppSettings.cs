@@ -110,6 +110,12 @@ namespace EarTrumpet
             }
         }
 
+        public string FilterDevicesList
+        {
+            get => _settings.Get("FilteredDevices", "");
+            set { _settings.Set("FilteredDevices", value); }
+        }
+
         public bool UseLegacyIcon
         {
             get

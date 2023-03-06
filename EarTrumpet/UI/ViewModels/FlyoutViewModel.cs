@@ -19,7 +19,7 @@ namespace EarTrumpet.UI.ViewModels
         public ModalDialogViewModel Dialog { get; }
         public bool IsExpanded { get; private set; }
         public bool IsExpandingOrCollapsing { get; private set; }
-        public bool CanExpand => _mainViewModel.AllDevices.Count > 1;
+        public bool CanExpand => _mainViewModel.PreferredDevices.Count > 1;
         public string DeviceNameText => Devices.Count > 0 ? Devices[0].DisplayName : null;
         public FlyoutViewState State { get; private set; }
         public ObservableCollection<DeviceViewModel> Devices { get; private set; }
@@ -45,8 +45,8 @@ namespace EarTrumpet.UI.ViewModels
             _returnFocusToTray = returnFocusToTray;
             _mainViewModel = mainViewModel;
             _mainViewModel.DefaultChanged += OnDefaultPlaybackDeviceChanged;
-            _mainViewModel.AllDevices.CollectionChanged += AllDevices_CollectionChanged;
-            AllDevices_CollectionChanged(null, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            _mainViewModel.PreferredDevices.CollectionChanged += PreferredDevices_CollectionChanged;
+            PreferredDevices_CollectionChanged(null, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
 
             // This timer is used to enable clicking on the tray icon while the flyout is open, and not causing a
             // rapid hide and show cycle.  This time represents the minimum time between which the flyout may be opened.
@@ -111,7 +111,7 @@ namespace EarTrumpet.UI.ViewModels
             }
         }
 
-        private void AllDevices_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void PreferredDevices_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
             {
@@ -129,7 +129,7 @@ namespace EarTrumpet.UI.ViewModels
                         RemoveDevice(Devices[i].Id);
                     }
 
-                    foreach (var device in _mainViewModel.AllDevices)
+                    foreach (var device in _mainViewModel.PreferredDevices)
                     {
                         AddDevice(device);
                     }
@@ -166,10 +166,10 @@ namespace EarTrumpet.UI.ViewModels
             }
             else
             {
-                var foundAllDevice = _mainViewModel.AllDevices.FirstOrDefault(d => d.Id == e.Id);
+                var foundAllDevice = _mainViewModel.PreferredDevices.FirstOrDefault(d => d.Id == e.Id);
                 if (foundAllDevice != null)
                 {
-                    // We found the device in AllDevices which was not in Devices.
+                    // We found the device in PreferredDevices which was not in Devices.
                     // Thus: We are collapsed and can dump the single device in Devices:
                     Devices.Clear();
                     foundAllDevice.Apps.CollectionChanged += Apps_CollectionChanged;
@@ -196,7 +196,7 @@ namespace EarTrumpet.UI.ViewModels
             if (IsExpanded)
             {
                 // Add any that aren't existing.
-                foreach (var device in _mainViewModel.AllDevices)
+                foreach (var device in _mainViewModel.PreferredDevices)
                 {
                     if (!Devices.Contains(device))
                     {
