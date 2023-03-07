@@ -44,6 +44,11 @@ namespace EarTrumpet.UI.ViewModels
             _peakMeterTimer.Elapsed += PeakMeterTimer_Elapsed;
         }
 
+        public void ReloadDevices()
+        {
+            OnCollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
+
         private void OnDefaultChanged(object sender, IAudioDevice newDevice)
         {
             if (newDevice == null)

@@ -11,6 +11,7 @@ namespace EarTrumpet.UI.ViewModels
     class FilterDevicesViewModel : SettingsPageViewModel
     {
         private readonly AppSettings _settings;
+        private readonly DeviceCollectionViewModel _mainViewModel;
 
         public string FilterDevicesList
         {
@@ -18,8 +19,9 @@ namespace EarTrumpet.UI.ViewModels
             set { _settings.FilterDevicesList = value; }
         }
 
-        public FilterDevicesViewModel(AppSettings settings) : base(null)
+        public FilterDevicesViewModel(DeviceCollectionViewModel mainViewModel, AppSettings settings) : base(null)
         {
+            _mainViewModel = mainViewModel;
             _settings = settings;
             Glyph = "\xE946";
             Title = Properties.Resources.FilterDevicesTitle;
@@ -29,6 +31,7 @@ namespace EarTrumpet.UI.ViewModels
         {
             var box = (sender as TextBox);
             FilterDevicesList = box.Text;
+            _mainViewModel.ReloadDevices();
         }
     }
 }
