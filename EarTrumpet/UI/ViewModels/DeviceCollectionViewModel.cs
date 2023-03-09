@@ -131,6 +131,12 @@ namespace EarTrumpet.UI.ViewModels
                     {
                         AllDevices.Remove(allExisting);
                     }
+
+                    var preferredExisting = PreferredDevices.FirstOrDefault(d => d.Id == removed);
+                    if (preferredExisting != null)
+                    {
+                        PreferredDevices.Remove(preferredExisting);
+                    }
                     break;
 
                 case NotifyCollectionChangedAction.Reset:
