@@ -24,29 +24,56 @@ namespace EarTrumpet.UI.ViewModels
         public ObservableCollection<DeviceViewModel> PreferredDevices { get; private set; } = new ObservableCollection<DeviceViewModel>();
         public DeviceViewModel Default { get; private set; }
 
+        private readonly FilterManager _filterManager;
         private readonly IAudioDeviceManager _deviceManager;
         private readonly Timer _peakMeterTimer;
-        private readonly AppSettings _settings;
         private readonly Dispatcher _currentDispatcher = Dispatcher.CurrentDispatcher;
         private bool _isFlyoutVisible;
         private bool _isFullWindowVisible;
 
-        public DeviceCollectionViewModel(IAudioDeviceManager deviceManager, AppSettings settings)
+        public DeviceCollectionViewModel(IAudioDeviceManager deviceManager, FilterManager filterManager, AppSettings settings)
         {
-            _settings = settings;
             _deviceManager = deviceManager;
             _deviceManager.DefaultChanged += OnDefaultChanged;
-            _deviceManager.Devices.CollectionChanged += OnCollectionChanged;
-            OnCollectionChanged(null, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            _deviceManager.Devices.CollectionChanged += OnAllCollectionChanged;
+            OnAllCollectionChanged(null, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+
+            _filterManager = filterManager;
+            _filterManager.FilterChanged += OnFilterChanged;
 
             _peakMeterTimer = new Timer(1000 / 30); // 30 fps
             _peakMeterTimer.AutoReset = true;
             _peakMeterTimer.Elapsed += PeakMeterTimer_Elapsed;
         }
 
+        private void OnFilterChanged(object sender, FilterData e)
+        {
+            var deviceId = e.Device.Id;
+            var deviceViewModel = AllDevices.FirstOrDefault(d => d.Id == deviceId);
+            var preferredElement = PreferredDevices.FirstOrDefault(d => d.Id == deviceId);
+
+            if(e.IsShown)
+            {
+                if(preferredElement == null && deviceViewModel != null)
+                {
+                    PreferredDevices.Add(deviceViewModel);
+                }
+            }
+            else
+            {
+                if (preferredElement != null && deviceViewModel != null)
+                {
+                    PreferredDevices.Remove(deviceViewModel);
+                }
+            }
+
+            ReloadDevices();
+        }
+
         public void ReloadDevices()
         {
-            OnCollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            OnAllCollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            SetDefault(Default);
         }
 
         private void OnDefaultChanged(object sender, IAudioDevice newDevice)
@@ -103,15 +130,33 @@ namespace EarTrumpet.UI.ViewModels
             
             AllDevices.AddSorted(newDevice, DeviceViewModel.CompareByDisplayName);
 
-            string[] separators = new string[] { "\r\n" };
-            var filteredDevices = _settings.FilterDevicesList.Split(separators, StringSplitOptions.None);
-            if (!filteredDevices.Contains(device.DisplayName))
+            var existing = _filterManager.DeviceStatus.FirstOrDefault(x => x.Device.Id == newDevice.Id);
+            if (existing != null)
             {
-                PreferredDevices.Add(newDevice);
+                if(existing.IsShown)
+                {
+                    PreferredDevices.Add(newDevice);
+                }
             }
         }
 
-        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        protected virtual void RemoveDevice(IAudioDevice device)
+        {
+            var removed = device.Id;
+            var allExisting = AllDevices.FirstOrDefault(d => d.Id == removed);
+            if (allExisting != null)
+            {
+                AllDevices.Remove(allExisting);
+            }
+
+            var preferredExisting = PreferredDevices.FirstOrDefault(d => d.Id == removed);
+            if (preferredExisting != null)
+            {
+                PreferredDevices.Remove(preferredExisting);
+            }
+        }
+
+        private void OnAllCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
             {
@@ -125,18 +170,7 @@ namespace EarTrumpet.UI.ViewModels
                     break;
 
                 case NotifyCollectionChangedAction.Remove:
-                    var removed = ((IAudioDevice)e.OldItems[0]).Id;
-                    var allExisting = AllDevices.FirstOrDefault(d => d.Id == removed);
-                    if (allExisting != null)
-                    {
-                        AllDevices.Remove(allExisting);
-                    }
-
-                    var preferredExisting = PreferredDevices.FirstOrDefault(d => d.Id == removed);
-                    if (preferredExisting != null)
-                    {
-                        PreferredDevices.Remove(preferredExisting);
-                    }
+                    RemoveDevice((IAudioDevice)e.OldItems[0]);
                     break;
 
                 case NotifyCollectionChangedAction.Reset:

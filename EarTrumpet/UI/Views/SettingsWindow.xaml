@@ -8,6 +8,7 @@
         xmlns:datamodel="clr-namespace:EarTrumpet.DataModel"
         xmlns:local="clr-namespace:EarTrumpet"
         xmlns:resx="clr-namespace:EarTrumpet.Properties"
+        xmlns:views="clr-namespace:EarTrumpet.UI.Views"
         xmlns:vm="clr-namespace:EarTrumpet.UI.ViewModels"
         Name="WindowRoot"
         Title="{Binding Title}"
@@ -374,13 +375,19 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:FilterDevicesViewModel}">
             <StackPanel Orientation="Vertical">
-                <TextBlock Style="{StaticResource BodyText}" Text="{x:Static resx:Resources.FilterDevicesText}" ></TextBlock>
-                <TextBox
-                    Text="{Binding FilterDevicesList}"
-                    TextWrapping="NoWrap"
-                    AcceptsReturn="True"
-                    VerticalScrollBarVisibility="Auto"
-                    LostFocus="{Event:Binding OnLostFocus}"></TextBox>
+                <ItemsControl Name="FiltersList"
+                              FocusVisualStyle="{x:Null}"
+                              IsTabStop="False"
+                              ItemsSource="{Binding Devices}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <CheckBox Content="{Binding DisplayName}"
+                                          IsChecked="{Binding IsShown}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </StackPanel>
         </DataTemplate>
         <Style x:Key="SettingsListViewItem" TargetType="{x:Type ListViewItem}">

@@ -154,6 +154,7 @@
     <Compile Include="DataModel\AppInformation\Internal\ZombieProcessException.cs" />
     <Compile Include="DataModel\Audio\Mocks\AudioDevice.cs" />
     <Compile Include="DataModel\Audio\Mocks\AudioDeviceSession.cs" />
+    <Compile Include="DataModel\FilterManager.cs" />
     <Compile Include="DataModel\WindowsAudio\AudioDeviceKind.cs" />
     <Compile Include="DataModel\WindowsAudio\IAudioDeviceManagerWindowsAudio.cs" />
     <Compile Include="DataModel\Audio\IAudioDeviceSessionComparer.cs" />
@@ -205,6 +206,7 @@
     <Compile Include="UI\Behaviors\ComboBoxEx.cs" />
     <Compile Include="UI\Controls\AppPopup.cs" />
     <Compile Include="UI\Controls\ImageEx.cs" />
+    <Compile Include="UI\ViewModels\FilterDataViewModel.cs" />
     <Compile Include="UI\Helpers\IShellNotifyIconSource.cs" />
     <Compile Include="UI\Helpers\ShellNotifyIcon.cs" />
     <Compile Include="Interop\Helpers\Kernel32Helper.cs" />
