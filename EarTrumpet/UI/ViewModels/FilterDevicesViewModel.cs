@@ -30,11 +30,10 @@ namespace EarTrumpet.UI.ViewModels
 
         private void AddDevice(FilterData filter)
         {
-            var added = filter;
-            var allExistingAdded = Devices.FirstOrDefault(d => d.Id == added.Device.Id);
+            var allExistingAdded = Devices.FirstOrDefault(d => d.Id == filter.Device.Id);
             if (allExistingAdded == null)
             {
-                Devices.Add(new FilterDataViewModel(this, added, (x) => { ApplyFilterStatus(x); }));
+                Devices.Add(new FilterDataViewModel(filter, (x) => { ApplyFilterStatus(x); }));
             }
         }
 
@@ -73,7 +72,7 @@ namespace EarTrumpet.UI.ViewModels
 
         public void ApplyFilterStatus(FilterData filterData)
         {
-            FilterManager.Current.ApplyDeviceStatus(filterData);
+            _filterManager.ApplyDeviceStatus(filterData);
         }
     }
 }

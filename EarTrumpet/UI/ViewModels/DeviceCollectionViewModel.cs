@@ -66,14 +66,6 @@ namespace EarTrumpet.UI.ViewModels
                     PreferredDevices.Remove(deviceViewModel);
                 }
             }
-
-            ReloadDevices();
-        }
-
-        public void ReloadDevices()
-        {
-            OnAllCollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-            SetDefault(Default);
         }
 
         private void OnDefaultChanged(object sender, IAudioDevice newDevice)

@@ -30,15 +30,12 @@ namespace EarTrumpet.UI
         }
 
         private FilterData _data;
-        private FilterDevicesViewModel _filterDevicesViewModel;
-
         private readonly Action<FilterData> _apply;
 
-        public FilterDataViewModel(FilterDevicesViewModel parent, FilterData filter, Action<FilterData> apply)
+        public FilterDataViewModel(FilterData filter, Action<FilterData> apply)
         {
             _apply = apply;
             _data = filter;
-            _filterDevicesViewModel = parent;
         }
     }
 }

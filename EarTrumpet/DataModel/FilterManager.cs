@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Markup;
 
 using EarTrumpet.DataModel.Audio;
-using EarTrumpet.UI.ViewModels;
 
 namespace EarTrumpet
 {
