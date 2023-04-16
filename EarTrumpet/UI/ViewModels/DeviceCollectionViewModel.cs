@@ -127,7 +127,7 @@ namespace EarTrumpet.UI.ViewModels
             {
                 if(existing.IsShown)
                 {
-                    PreferredDevices.Add(newDevice);
+                    PreferredDevices.AddSorted(newDevice, DeviceViewModel.CompareByDisplayName);
                 }
             }
         }

@@ -76,12 +76,12 @@ namespace EarTrumpet.UI.ViewModels
             ChangeState(FlyoutViewState.Hidden);
         }
 
-        private void AddDevice(DeviceViewModel device)
+        private void AddDevice(int index, DeviceViewModel device)
         {
             if (IsExpanded || Devices.Count == 0)
             {
                 device.Apps.CollectionChanged += Apps_CollectionChanged;
-                Devices.Insert(0, device);
+                Devices.Insert(index, device);
             }
         }
 
@@ -116,7 +116,7 @@ namespace EarTrumpet.UI.ViewModels
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    AddDevice((DeviceViewModel)e.NewItems[0]);
+                    AddDevice(e.NewStartingIndex, (DeviceViewModel)e.NewItems[0]);
                     break;
 
                 case NotifyCollectionChangedAction.Remove:
@@ -131,7 +131,7 @@ namespace EarTrumpet.UI.ViewModels
 
                     foreach (var device in _mainViewModel.PreferredDevices)
                     {
-                        AddDevice(device);
+                        AddDevice(Devices.Count, device);
                     }
 
                     OnDefaultPlaybackDeviceChanged(null, _mainViewModel.Default);
