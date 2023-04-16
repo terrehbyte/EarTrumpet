@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Markup;
 
 using EarTrumpet.DataModel.Audio;
+using EarTrumpet.Extensions;
+using EarTrumpet.UI.ViewModels;
 
 namespace EarTrumpet
 {
@@ -61,7 +63,7 @@ namespace EarTrumpet
         private void AddDevice(IAudioDevice device)
         {
             FilterData newFilter = new FilterData() { Device = device, IsShown = !_filteredIDs.Contains(device.Id) };
-            DeviceStatus.Add(newFilter);
+            DeviceStatus.AddSorted(newFilter, FilterData.CompareByDeviceDisplayName);
             FilterChanged(this, newFilter);
         }
 
@@ -116,4 +118,14 @@ public class FilterData
 {
     public IAudioDevice Device { get; set; }
     public bool IsShown { get; set; } = true;
+
+    public class DeviceDisplayNameComparer : IComparer<FilterData>
+    {
+        public int Compare(FilterData one, FilterData two)
+        {
+            return one.Device.DisplayName.CompareTo(two.Device.DisplayName);
+        }
+    }
+
+    public static readonly DeviceDisplayNameComparer CompareByDeviceDisplayName = new DeviceDisplayNameComparer();
 }

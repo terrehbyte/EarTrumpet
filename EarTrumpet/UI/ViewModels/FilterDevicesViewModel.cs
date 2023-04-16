@@ -28,12 +28,12 @@ namespace EarTrumpet.UI.ViewModels
             OnFilteredCollectionChanged(null, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
-        private void AddDevice(FilterData filter)
+        private void AddDevice(int index, FilterData filter)
         {
             var allExistingAdded = Devices.FirstOrDefault(d => d.Id == filter.Device.Id);
             if (allExistingAdded == null)
             {
-                Devices.Add(new FilterDataViewModel(filter, (x) => { ApplyFilterStatus(x); }));
+                Devices.Insert(index, new FilterDataViewModel(filter, (x) => { ApplyFilterStatus(x); }));
             }
         }
 
@@ -43,7 +43,7 @@ namespace EarTrumpet.UI.ViewModels
             {
                 case NotifyCollectionChangedAction.Add:
                     var added = (FilterData)e.NewItems[0];
-                    AddDevice(added);
+                    AddDevice(e.NewStartingIndex, added);
                     break;
 
                 case NotifyCollectionChangedAction.Remove:
@@ -60,7 +60,7 @@ namespace EarTrumpet.UI.ViewModels
 
                     foreach (var device in _filterManager.DeviceStatus)
                     {
-                        AddDevice(device);
+                        AddDevice(Devices.Count, device);
                     }
 
                     break;
